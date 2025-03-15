@@ -63,7 +63,6 @@ SELECT
      sum(quantity) as no_qty_sold
 FROM walmart
 GROUP BY payment_method
-'''
        
      - highest-rated category in each branch, displaying the branch, category avg rating
 '''sql
