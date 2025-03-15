@@ -55,11 +55,124 @@ This project is an end-to-end data analysis solution designed to extract critica
 
 ### 9. SQL Analysis: Complex Queries and Business Problem Solving
    - **Business Problem-Solving**: Write and execute complex SQL queries to answer critical business questions, such as:
-     - Revenue trends across branches and categories.
-     - Identifying best-selling product categories.
-     - Sales performance by time, city, and payment method.
-     - Analyzing peak sales periods and customer buying patterns.
-     - Profit margin analysis by branch and category.
+     - different payment methods and number of transactions and number of quantity sold.
+'''sql
+SELECT
+	 payment_method,
+     COUNT(*) as no_payments,
+     sum(quantity) as no_qty_sold
+FROM walmart
+GROUP BY payment_method
+'''
+       
+     - highest-rated category in each branch, displaying the branch, category avg rating
+'''sql
+SELECT *
+FROM (
+    SELECT
+        branch,
+        category,
+        AVG(rating) AS avg_rating,
+        RANK() OVER(PARTITION BY branch ORDER BY AVG(rating) DESC) AS rank_pos
+    FROM walmart
+    GROUP BY branch, category
+) AS ranked_data 
+WHERE rank_pos = 1;
+'''
+     - busiest day for each branch based on the number of transactions.
+'''sql
+SELECT * 
+FROM (
+    SELECT 
+        branch, 
+        DAYNAME(STR_TO_DATE(date, '%d/%m/%y')) AS day_name,
+        COUNT(*) AS no_transactions,
+        RANK() OVER(PARTITION BY branch ORDER BY COUNT(*) DESC) AS `rank`
+    FROM walmart
+    GROUP BY branch, day_name
+) ranked_data
+WHERE `rank` = 1;
+'''
+     - total quantity of items sold per payment method. List payment_method and total_quantity.
+'''sql
+SELECT
+    payment_method,
+    -- COUNT(*) AS no_payments,
+    SUM(quantity) AS no_qty_sold
+FROM walmart
+GROUP BY payment_method;
+'''
+     - Determine the average, minimum, and maximum rating of category for each city. List the city, average_rating, min_rating, and max_rating.
+'''sql
+SELECT
+    city,
+    category,
+    MIN(rating) as min_rating,
+    MAX(rating) as max_rating,
+    AVG(rating) as avg_rating
+FROM walmart
+GROUP BY 1, 2
+'''
+      - Calculate the total profit for each category by considering total profit as (unit_prize, quantity, profity_margine) list category and total_profit, ordered from highest to lowest profit.
+'''sql
+SELECT
+     category,
+     SUM(total) as total_revenue,
+     SUM(total * profit_margin) as profit
+FROM walmart
+GROUP BY 1
+'''
+     - the most common payment method for each branch. Display branch and the preferred_payment_method.
+'''sql
+WITH cte AS (
+    SELECT
+        branch,
+        payment_method,
+        COUNT(*) AS total_trans,
+        RANK() OVER(PARTITION BY branch ORDER BY COUNT(*) DESC) AS rnk
+    FROM walmart
+    GROUP BY branch, payment_method
+)
+SELECT *
+FROM cte
+WHERE rnk = 1;
+'''
+     - Categorize sales into 3 group MORNING, AFTERNOON, EVENING. Find out which of the shift and number of invoices.
+'''sql
+SELECT 
+     branch,
+CASE 
+        WHEN HOUR(TIME(time)) < 12 THEN 'Morning'
+        WHEN HOUR(TIME(time)) BETWEEN 12 AND 17 THEN 'Afternoon'
+        ELSE 'Evening'
+    END AS day_time,
+    COUNT(*)
+FROM walmart
+GROUP BY 1, 2
+ORDER BY 1, 3 DESC
+'''
+     - Identify 5 branch with highest decrese ratio in evevenue compare to last year (current year 2023 and last year 2022)
+'''sql
+SELECT 
+    r2022.branch,
+    r2022.revenue AS last_year_revenue,
+    r2023.revenue AS cr_year_revenue,
+    ROUND((r2022.revenue - r2023.revenue) / r2022.revenue * 100, 2) AS rev_dec_ratio
+FROM 
+    (SELECT branch, SUM(total) AS revenue
+     FROM walmart
+     WHERE YEAR(STR_TO_DATE(date, '%d/%m/%y')) = 2022
+     GROUP BY branch) AS r2022
+JOIN 
+    (SELECT branch, SUM(total) AS revenue
+     FROM walmart
+     WHERE YEAR(STR_TO_DATE(date, '%d/%m/%y')) = 2023
+     GROUP BY branch) AS r2023
+ON r2022.branch = r2023.branch
+WHERE r2022.revenue > r2023.revenue
+ORDER BY rev_dec_ratio DESC
+LIMIT 5;
+'''
    - **Documentation**: Keep clear notes of each query's objective, approach, and results.
 
 ### 10. Project Publishing and Documentation
