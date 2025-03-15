@@ -67,7 +67,7 @@ SELECT
 FROM walmart 
 GROUP BY payment_method;
        
-     - highest-rated category in each branch, displaying the branch, category avg rating
+     ##2. highest-rated category in each branch, displaying the branch, category avg rating
 '''sql
 SELECT *
 FROM (
@@ -81,7 +81,7 @@ FROM (
 ) AS ranked_data 
 WHERE rank_pos = 1;
 '''
-     - busiest day for each branch based on the number of transactions.
+     ##3. busiest day for each branch based on the number of transactions.
 '''sql
 SELECT * 
 FROM (
@@ -95,7 +95,7 @@ FROM (
 ) ranked_data
 WHERE `rank` = 1;
 '''
-     - total quantity of items sold per payment method. List payment_method and total_quantity.
+     ##4. total quantity of items sold per payment method. List payment_method and total_quantity.
 '''sql
 SELECT
     payment_method,
@@ -104,7 +104,7 @@ SELECT
 FROM walmart
 GROUP BY payment_method;
 '''
-     - Determine the average, minimum, and maximum rating of category for each city. List the city, average_rating, min_rating, and max_rating.
+     ##5. Determine the average, minimum, and maximum rating of category for each city. List the city, average_rating, min_rating, and max_rating.
 '''sql
 SELECT
     city,
@@ -115,7 +115,7 @@ SELECT
 FROM walmart
 GROUP BY 1, 2
 '''
-      - Calculate the total profit for each category by considering total profit as (unit_prize, quantity, profity_margine) list category and total_profit, ordered from highest to lowest profit.
+      ##6. Calculate the total profit for each category by considering total profit as (unit_prize, quantity, profity_margine) list category and total_profit, ordered from highest to lowest profit.
 '''sql
 SELECT
      category,
@@ -124,7 +124,7 @@ SELECT
 FROM walmart
 GROUP BY 1
 '''
-     - the most common payment method for each branch. Display branch and the preferred_payment_method.
+     ##7. the most common payment method for each branch. Display branch and the preferred_payment_method.
 '''sql
 WITH cte AS (
     SELECT
@@ -139,7 +139,7 @@ SELECT *
 FROM cte
 WHERE rnk = 1;
 '''
-     - Categorize sales into 3 group MORNING, AFTERNOON, EVENING. Find out which of the shift and number of invoices.
+     ##8. Categorize sales into 3 group MORNING, AFTERNOON, EVENING. Find out which of the shift and number of invoices.
 '''sql
 SELECT 
      branch,
@@ -153,7 +153,7 @@ FROM walmart
 GROUP BY 1, 2
 ORDER BY 1, 3 DESC
 '''
-     - Identify 5 branch with highest decrese ratio in evevenue compare to last year (current year 2023 and last year 2022)
+     ##9. Identify 5 branch with highest decrese ratio in evevenue compare to last year (current year 2023 and last year 2022)
 '''sql
 SELECT 
     r2022.branch,
