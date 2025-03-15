@@ -55,8 +55,8 @@ This project is an end-to-end data analysis solution designed to extract critica
 
 ### 9. SQL Analysis: Complex Queries and Business Problem Solving
    - **Business Problem-Solving**: Write and execute complex SQL queries to answer critical business questions, such as:
+     
      ## 1. Different Payment Methods and Number of Transactions
-
 This query retrieves different payment methods, the number of transactions, and the total quantity of items sold.
 
 ```sql
@@ -176,6 +176,8 @@ ORDER BY rev_dec_ratio DESC
 LIMIT 5;
 '''
    - **Documentation**: Keep clear notes of each query's objective, approach, and results.
+
+---
 
 ### 10. Project Publishing and Documentation
    - **Documentation**: Maintain well-structured documentation of the entire process in Markdown or a Jupyter Notebook.
